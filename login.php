@@ -107,7 +107,7 @@ function processarLogin($data, $pdo) {
                 echo json_encode([
                     'success' => true, 
                     'message' => 'Login realizado com sucesso!',
-                    'redirect' => 'painel.php'
+                    'redirect' => 'painel.html'
                 ]);
             } else {
                 echo json_encode(['success' => false, 'message' => 'Credenciais inválidas']);

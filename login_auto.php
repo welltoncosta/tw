@@ -37,7 +37,7 @@ try {
         $stmt->execute();
         
         // Redirecionar para o painel
-        header("Location: painel.php");
+        header("Location: painel.html");
         exit;
     } else {
         // Token inválido ou expirado

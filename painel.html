@@ -2032,16 +2032,7 @@
                 
                 // Array para armazenar as atividades inscritas com seus horários
                 const atividadesInscritas = [];
-                
-                <?php foreach ($atividades_inscritas as $atividade): ?>
-                atividadesInscritas.push({
-                    id: <?php echo $atividade['id']; ?>,
-                    data: '<?php echo $atividade['data']; ?>',
-                    hora_inicio: '<?php echo $atividade['hora_inicio']; ?>',
-                    hora_fim: '<?php echo $atividade['hora_fim']; ?>',
-                    titulo: '<?php echo addslashes($atividade['titulo']); ?>'
-                });
-                <?php endforeach; ?>
+                                
                 
                 // Função para verificar conflito de horários
                 function temConflito(novaAtividade, atividadesInscritas) {
