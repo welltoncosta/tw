@@ -1,0 +1,85 @@
+<?php
+
+//include("../sessao.php");
+include("../conexao.php");
+    
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require './src/Exception.php';
+require './src/PHPMailer.php';
+require './src/SMTP.php';
+
+
+if($_GET["senha"]=="senha"){
+
+    $email = $_POST["email"];
+    
+    $sql = mysqli_query($c, "SELECT nome, hash FROM ".$ano."_participantes WHERE email='$email'") or die (mysql_error());
+    $cont=mysqli_num_rows($sql);
+    
+    if($cont==0){
+        session_start();
+        $_SESSION["m"]="O Email fornecido não está cadastrado. Tente outro ou cadastre-se ao lado.";
+        header("location: ../alterar_senha.php#reiniciar_senha");
+    }else{
+        $mostra=mysqli_fetch_array($sql);
+
+        $destinatario = $email;
+        $nome = $mostra["nome"];
+        $hash = $mostra["hash"];
+
+        $assunto = "Alteração de senha - I Semana Acadêmica de Informática da UTFPR Francisco Beltrão";
+        
+        $mensagem = "Prezada(o) ".$nome.",<br><br>recebemos uma solicitação de alteração de senha no sistema da I Semana acadêmica de informática da UTFPR Francisco Beltrão. Por motivos de segurança, estamos enviando este email para ter certeza que é você mesmo quem pediu isso. Clique no link abaixo para inserir uma nova senha.<br><br><a href='https://salin.fb.utfpr.edu.br/nova_senha.php?hash=".$hash."'>https://salin.fb.utfpr.edu.br/nova_senha.php?hash=".$hash."</a> <br><br>Atenciosamente,<br><br>Comissão Organizadora da I Semana Acadêmica de Informática da UTFPR Francisco Beltrão, 2023.";
+                
+        
+    }
+    
+}
+
+
+function enviar_email($destinatario, $assunto, $mensagem){
+
+    $remetente = "I Semana Acadêmica de Informática da UTFPR Francisco Beltrão";
+
+    $mail = new PHPMailer();
+    
+    $mail->isSMTP();
+    $mail->charSet = "utf-8"; 
+    $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+    $mail->Host = 'smtp.utfpr.edu.br';
+    $mail->SMTPSecure = 'ssl';    
+    $mail->Port = 465;
+    $mail->SMTPAuth = true;
+    $mail->Username = 'wcti-fb';
+    $mail->Password = 'Wcti@2019';
+    $mail->setFrom('wcti-fb@utfpr.edu.br', utf8_decode($remetente));
+    
+    //$mail->addReplyTo($destinatario, 'First Last');
+    $mail->addAddress($destinatario, '');
+    
+    $mail->Subject = utf8_decode($assunto);
+    //$mail->msgHTML(file_get_contents('teste.html'), __DIR__);
+    $mail->msgHTML(utf8_decode($mensagem));
+    
+    //$mail->AltBody = 'This is a plain-text message body';
+  
+    //send the message, check for errors
+    if (!$mail->send()) {
+        echo 'Mailer Error: ' . $mail->ErrorInfo;
+    } else {
+        echo 'Mensagem Enviada para ' . $destinatario . '!';
+        header("location: ../index.php?email=$destinatario&m=email_senha_enviado#login");
+    }
+    
+}
+
+enviar_email($destinatario, $assunto, $mensagem);
+

@@ -1,0 +1,1 @@
+Front-end e Back-end feito pelo professor Wellton Costa de Oliveira (front-end e back-end) baseado nos sistemas de evento dos anos passados dos eventos semanas acadêmicas da UTFPR/FB de acordo com a identidade visual do estudante de bacharelado em sistemas de informação David. O ex-aluno Marcos Marcolin desenvolveu os códigos do front-end dos eventos passados.
